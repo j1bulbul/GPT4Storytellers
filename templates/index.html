@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>StoryGPT</title>
+    <!-- JointJS Dependencies -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.4.2/joint.min.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.4.0/backbone-min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jointjs/3.4.2/joint.min.js"></script>
+    <style>
+        #popup {
+            display: none; /* Hidden by default */
+            position: absolute; /* Will allow us to position it on the screen */
+            z-index: 1000; /* Ensures it appears above other content */
+            border: 1px solid black;
+            background-color: white;
+            padding: 10px;
+            width: 800px;
+            height: 300px;
+            top: 70%; /* Center it vertically */
+            left: 50%; /* Center it horizontally */
+            transform: translate(-50%, -50%); /* Ensures true centering */
+            overflow: visible
+        }
+        #popup button:hover {
+            background-color: white;
+            box-shadow: none;
+        }
+        #summaryPane {
+            flex: 1;
+            border-right: 1px solid black;
+            padding: 10px;
+        }
+        #chatPane {
+            flex: 1;
+            padding: 10px;
+            display: flex;
+            flex-direction: column
+        }
+        #chatContainer {
+            flex-grow: 1; /* This will make the chat container grow to take up available space */
+            overflow-y: auto; /* Ensure that content inside can scroll if it overflows */
+            word-wrap: break-word; /* Break long words and wrap onto the next line */
+            margin-bottom: 10px; /* Provides spacing between chat container and chat input */
+        }
+        #popupText, #chatMessages {
+            overflow-y: auto;          /* Add scrollbars when content overflows */
+            word-wrap: break-word;   /* Break long words and wrap onto the next line */
+        }
+        #paper {
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+    <h1>Welcome to StoryGPT!</h1>
+    <p>Select a section of the story:</p>
+    <select id="storySection">
+        <option value="exposition">Exposition</option>
+        <option value="risingAction">Rising Action</option>
+        <option value="climax">Climax</option>
+        <option value="fallingAction">Falling Action</option>
+        <option value="resolution">Resolution</option>
+    </select>
+
+    <textarea id="chatArea" rows="10" cols="50"></textarea>
+    <button id="sendBtn">Send</button>
+
+    <div id="responseArea"></div>
+    <div id="paper"></div>
+    <div id="popup">
+        <div style="display: flex; width: 100%; height: 100%;">
+            <!-- Left pane for the summary -->
+            <div id="summaryPane">
+                <h3>Summary</h3>
+                <p id="popupText"></p>
+            </div>
+
+            <!-- Right pane for the chatbot -->
+            <div id="chatPane">
+                <h3>Chat with GPT Here</h3>
+                <div id="chatContainer">
+                    <div id="chatMessages"></div>
+                </div>
+                <input type="text" id="chatInput" placeholder="Ask GPT-3..."/>
+                <button id="chatSend">Send</button>
+            </div>
+        </div>
+        <button onclick="closePopup()" style="position: absolute; top: -30px; right: -30px; background-color: white; border: 1px solid black; border-radius: 50%; width: 30px; height: 30px; line-height: 26px; text-align: center; font-weight: bold; font-size: 18px;">X</button>
+    </div>
+    <script>
+        // Helper function to capitalize the first letter of a string
+        function capitalizeFirstLetter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
+        }
+        function showPopup(summaryText, currentStorySection) {
+            console.log("Displaying popup with content:", summaryText);
+            if (summaryText.trim() === "") {
+                summaryText = "No summary available for this section, please input text for this plot point :)";
+            }
+              // Get the <h3> element and update its content
+            const summaryHeader = document.querySelector("#summaryPane h3");
+            summaryHeader.innerText = `Summary - ${capitalizeFirstLetter(currentStorySection)}`;
+            const popup = document.getElementById('popup');
+            const popupText = document.getElementById('popupText');
+            popupText.innerText = summaryText;
+            popup.style.display = 'block';
+        }
+        function closePopup() {
+            const popup = document.getElementById('popup');
+            popup.style.display = 'none';
+        }
+        document.addEventListener("DOMContentLoaded", function() {
+            let currentStorySection = "exposition";  // default value
+            let storyData = {
+                exposition: "",
+                risingAction: "",
+                climax: "",
+                fallingAction: "",
+                resolution: ""
+            };
+            document.getElementById("sendBtn").addEventListener("click", function () {
+                const section = document.getElementById("storySection").value;
+                const message = document.getElementById("chatArea").value;
+
+                fetch("/interact", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({section: section, message: message})
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        storyData[section] = data.response;
+                    });
+            });
+            document.getElementById("chatSend").addEventListener("click", function() {
+                const userMessage = document.getElementById("chatInput").value;
+                const section = currentStorySection; // This should be the current section of the story you're working with.
+                         // If the popup is generic, you might need to keep track of which section
+                         // opened the popup to determine the context.
+                if(userMessage.trim() !== "") {
+                    // Append user message to chat area
+                    const chatMessagesDiv = document.getElementById("chatMessages");
+                    chatMessagesDiv.innerHTML += `<div>User: ${userMessage}</div>`;
+
+                    // Send the user's message to the server
+                    fetch("/chat", {
+                        method: "POST",
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ section: section, message: userMessage })
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        const chatMessagesDiv = document.getElementById("chatMessages");
+                        chatMessagesDiv.innerHTML += `<div>GPT-4: ${data.response}</div>`;
+                    });
+                }
+            });
+            document.getElementById("chatInput").addEventListener("keypress", function(e) {
+                if (e.key === "Enter") {
+                    e.preventDefault(); // Prevent any default action
+                    document.getElementById("chatSend").click(); // Trigger the chatSend button's click event
+                }
+            });
+            var graph = new joint.dia.Graph;
+            var paper = new joint.dia.Paper({
+                el: $('#paper'),
+                width: 800,
+                height: 400,
+                gridSize: 10,
+                model: graph
+            });
+            var rect1 = new joint.shapes.standard.Rectangle({
+                position: {x: 100, y: 30},
+                size: {width: 100, height: 30},
+                attrs: {rect: {fill: 'blue'}, text: {text: 'Exposition', fill: 'white'}}
+            });
+            var rect2 = rect1.clone().translate(150, 0).attr({text: {text: 'Rising Action'}});
+            var rect3 = rect1.clone().translate(300, 0).attr({text: {text: 'Climax'}});
+            var rect4 = rect1.clone().translate(450, 0).attr({text: {text: 'Falling Action'}});
+            var rect5 = rect1.clone().translate(600, 0).attr({text: {text: 'Resolution'}});
+            var link1 = new joint.shapes.standard.Link({
+                source: {id: rect1.id},
+                target: {id: rect2.id}
+            });
+            var link2 = link1.clone().set('source', {id: rect2.id}).set('target', {id: rect3.id});
+            var link3 = link1.clone().set('source', {id: rect3.id}).set('target', {id: rect4.id});
+            var link4 = link1.clone().set('source', {id: rect4.id}).set('target', {id: rect5.id});
+            paper.on('cell:pointerclick', function(cellView) {
+                var cellId = cellView.model.id;
+                if (cellId === rect1.id) {
+                    console.log("Clicked on Exposition node");
+                    currentStorySection = "exposition";
+                    showPopup(storyData.exposition, currentStorySection);
+                } else if (cellId === rect2.id) {
+                    console.log("Clicked on Rising Action node");
+                    currentStorySection = "risingAction";
+                    showPopup(storyData.risingAction, currentStorySection);
+                } else if (cellId === rect3.id) {
+                    console.log("Clicked on Climax node");
+                    currentStorySection = "climax";
+                    showPopup(storyData.climax, currentStorySection);
+                } else if (cellId === rect4.id) {
+                    console.log("Clicked on Falling Action node");
+                    currentStorySection = "fallingAction";
+                    showPopup(storyData.fallingAction, currentStorySection);
+                } else if (cellId === rect5.id) {
+                    console.log("Clicked on Resolution node");
+                    currentStorySection = "resolution";
+                    showPopup(storyData.resolution, currentStorySection);
+                }
+            });
+            graph.addCells([rect1, rect2, rect3, rect4, rect5, link1, link2, link3, link4]);
+        });
+    </script>
+</body>
+</html>
