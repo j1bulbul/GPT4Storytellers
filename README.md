@@ -35,7 +35,7 @@ StoryGPT is a web application that leverages the OpenAI API to assist users in r
 ## Future Enhancements
 
 - **Plot Hole Detection Mode**: Toggle a decicated plot hole detection mode within chatbot to analyse new plot additions you may have for plot holes or inconsistencies (or just analyse your existing story content for plot holes)
-- **Character Development**: Toggle a character development mode within chatbot geared towards discussing characters with GPT-4 and getting feedback on your character backstories, motivations, and arcs
+- **Character Development Mode**: Toggle a character development mode within chatbot geared towards discussing characters with GPT-4 and getting feedback on your character backstories, motivations, and arcs
 - **Character List**: Obtain a list of all characters appearing in your story, a short description of each, and a list of interactions they have with other characters
 - **Script or Novel Toggle**: Provide a toggle switch between script or novel prior to pasting in story text.
   - If script is selected: the flow-chart showcasing story outline will be an auto-generated beatsheet (with GPT summarised text for each beat)
