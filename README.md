@@ -1,4 +1,4 @@
-# StoryGPT: A Storytelling Assistant using OpenAI GPT-4
+# StoryGPT: A Storytelling Assistant using the OpenAI API
 
 StoryGPT is a web application that leverages the OpenAI API to assist users in receiving feedback, brainstorm new ideas, or identify plot holes for their story.  Whether you're drafting a screenplay or brainstorming plot points, StoryGPT is here to act as a fresh set of "eyes" for your work.
 
