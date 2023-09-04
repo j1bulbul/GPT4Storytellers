@@ -30,7 +30,7 @@ StoryGPT is a web application that leverages the OpenAI API to assist users in r
 3. **(Optional)** Setup a virtual environment and activate it.
 4. **(Optional)** Connect to the OpenAI API by storing your OpenAI secret key in a `.env` file.
 5. Run the Flask server: `python app.py`.
-6. Open your browser and navigate to `http://localhost:5000`, or whichever port you have manually set to host the server, to start using StoryGPT.
+6. Open your browser and navigate to `http://localhost:5000`, or whichever port you have manually set to locally host your web-app, to start using StoryGPT.
 
 ## Future Enhancements
 
