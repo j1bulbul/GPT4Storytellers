@@ -4,8 +4,8 @@ StoryGPT is a web application that leverages the OpenAI API to assist users in r
 
 ## Features
 
-- **Interactive Plot Point Selection**: Select different sections of your story (exposititon, rising action, climax, falling action, resolution), input text you have for this section fo your story (actual story or outline), and receive a summary of that section in a flow chart for your reference.
-- **Chat with GPT-3**: Interact directly with GPT-4, which is "aware" of the section in your story you are discussing and the contents of the story itslef, in order to: receive feedback, brainstorm new plot ideas, or refine existing plot ideas.
+- **Interactive Plot Point Selection**: Select different sections of your story (exposititon, rising action, climax, falling action, resolution), input text you have for this section fo your story (actual script/novel or outline), and receive a summary of that section in a flow chart for your reference.
+- **Chat with GPT-3**: Interact directly with GPT-4, which is "aware" of the section in your story you are discussing and the actual content for that part in your story, in order to: receive feedback, brainstorm new plot ideas, or refine existing plot ideas.
 
 ![Plot Point Selection](INSERT_GIF_LINK_HERE "Plot Point Selection Demo")
 ![Chat with GPT-3](INSERT_GIF_LINK_HERE "Chat with GPT-3 Demo")
@@ -34,9 +34,12 @@ StoryGPT is a web application that leverages the OpenAI API to assist users in r
 
 ## Future Enhancements
 
-- **Plot Hole Detection**: Analyze story segments to identify potential plot inconsistencies or gaps.
-- **Character Development**: Get suggestions on character backstories, motivations, and arcs.
+- **Plot Hole Detection Mode**: Toggle a decicated plot hole detection mode within chatbot to analyse new plot additions you may have for plot holes or inconsistencies (or just analyse your existing story content for plot holes)
+- **Character Development**: Toggle a character development mode within chatbot geared towards discussing characters with GPT-4 and getting feedback on your character backstories, motivations, and arcs
 - **Character List**: Obtain a list of all characters appearing in your story, a short description of each, and a list of interactions they have with other characters
+- **Script or Novel Toggle**: Provide a toggle switch between script or novel prior to pasting in story text.
+  - If script is selected: the flow-chart showcasing story outline will be an auto-generated beatsheet (with GPT summarised text for each beat)
+  - If novel is selected: typical five act structure as shown in GIF above
 
 ## License
 
