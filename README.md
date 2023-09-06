@@ -52,8 +52,8 @@ StoryGPT is a web application that leverages the OpenAI API to assist users in r
   - If novel is selected: typical five-act structure as shown in GIF above.
 
 ## Implemented Enhancements
-- **Toggle Story/Outline**: Allows you to note if the text provided is from an outline or from your story, this information is fed to chatbot in order to provide more relevant feedback.
-- **Adaptive Chat Modes**: Toggle between distinct chat modes to steer GPT-4's responses. Each mode targets specific areas of your story/outline, includes: general feedback,  plothole detection, character development, and brainstorming modes.
+- **Toggle Story/Outline**: Toggle between if the text you provided is from an outline or from your actual story, this option allows GPT to provide more relevant feedback.
+- **Adaptive Chat Modes**: Toggle between distinct chat modes to steer chatbots responses. Each mode targets specific areas of your story/outline, includes: general feedback,  plothole detection, character development, and brainstorming modes.
 
 ## License
 
