@@ -31,7 +31,7 @@ StoryGPT is a web application that leverages the OpenAI API to assist users in r
 
 ![Chat with GPT-4 - General Feedback](./feedback_example.gif "General Feedback Mode Demo")
 
-<u>Plot Hole Detection Chat Mode Example</u>  
+<u>Plothole Detection Chat Mode Example</u>  
 
 ![Chat with GPT-4 - Plot Hole Detection](./plothole_example.gif "Plot Hole Detection Mode Demo")
 
